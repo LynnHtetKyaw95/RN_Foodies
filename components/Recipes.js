@@ -9,8 +9,12 @@ import MasonryList from "@react-native-seoul/masonry-list";
 import { mealData } from "../constants";
 import Animated, { FadeInDown } from "react-native-reanimated";
 import Loading from "./Loading";
+import { useNavigation } from "@react-navigation/native";
+import { CachedImage } from "../helpers/image";
 
 export default function Recipes({ categories, meals }) {
+  const navigation = useNavigation();
+
   return (
     <View className="mx-6 space-y-3">
       <Text
@@ -28,7 +32,9 @@ export default function Recipes({ categories, meals }) {
             keyExtractor={(item) => item.idMeal}
             numColumns={2}
             showsVerticalScrollIndicator={false}
-            renderItem={({ item, i }) => <RecipesCard item={item} index={i} />}
+            renderItem={({ item, i }) => (
+              <RecipesCard item={item} index={i} navigation={navigation} />
+            )}
             onEndReachedThreshold={0.1}
           />
         )}
@@ -37,7 +43,7 @@ export default function Recipes({ categories, meals }) {
   );
 }
 
-const RecipesCard = ({ item, index }) => {
+const RecipesCard = ({ item, index, navigation }) => {
   let isEven = index % 2 == 0;
 
   return (
@@ -48,6 +54,7 @@ const RecipesCard = ({ item, index }) => {
         .damping(12)}
     >
       <Pressable
+        onPress={() => navigation.navigate("RecipesDetail", { ...item })}
         style={{
           width: "100%",
           paddingLeft: isEven ? 0 : 8,
@@ -55,7 +62,7 @@ const RecipesCard = ({ item, index }) => {
         }}
         className="flex justify-center mb-4 space-y-1"
       >
-        <Image
+        {/* <Image
           source={{ uri: item.strMealThumb }}
           style={{
             width: "100%",
@@ -63,6 +70,16 @@ const RecipesCard = ({ item, index }) => {
             borderRadius: 35,
           }}
           className="bg-black/5"
+        /> */}
+        <CachedImage
+          uri={item.strMealThumb}
+          style={{
+            width: "100%",
+            height: index % 3 == 0 ? hp(25) : hp(35),
+            borderRadius: 35,
+          }}
+          className="bg-black/5"
+          sharedTransitionTag={item.strMeal}
         />
         <Text
           style={{ fontSize: hp(1.5) }}

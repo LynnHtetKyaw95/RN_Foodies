@@ -67,7 +67,10 @@ export default function WelcomeScreen() {
 
       {/* copyright */}
       <View>
-        <Text className="text-blue-500 text-lg mt-10">
+        <Text
+          style={{ fontSize: hp(2.5) }}
+          className="text-blue-500 text-2xl mt-10 font-bold"
+        >
           Made with ♥ by Zephyrl
         </Text>
       </View>
